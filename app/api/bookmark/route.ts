@@ -23,20 +23,17 @@ const isValidUrl = (url: string) => {
 export async function POST(request: NextRequest) {
     const { url } = await request.json();
 
-    const table = await notion.databases.retrieve({
-        database_id: process.env.NOTION_BOOKMARKS_DATABASE_ID as string,
-    });
-
-    const properties: Properties = table?.properties;
-
-    console.log("properties", properties);
-
     if (!isValidUrl(url)) {
         return new Response("Invalid URL", {
             status: 400,
         });
     }
     const result = await metaFetcher(url);
+
+    console.warn(
+        "process.env.NOTION_BOOKMARKS_DATABASE_ID",
+        process.env.NOTION_BOOKMARKS_DATABASE_ID
+    );
 
     const bookmark: CreatePageParameters = {
         parent: {
