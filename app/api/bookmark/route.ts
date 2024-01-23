@@ -2,9 +2,7 @@ import { notion } from "@/lib/notion";
 import { NextRequest } from "next/server";
 import metaFetcher from "meta-fetcher";
 
-import openGraphScrapper from "open-graph-scraper";
 import {
-    PageObjectResponse,
     CreatePageParameters,
     PartialDatabaseObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
