@@ -2,7 +2,7 @@
 Configure a `.env` at the project root containing the following secrets:
 
 ```bash
-
+NOTION_BOOKMARKS_DATABASE_ID="NOTION_DB_SECRET"
 ```
 ## Develop
 
