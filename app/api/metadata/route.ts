@@ -1,8 +1,7 @@
-import { notion } from "@/lib/notion";
 import { NextRequest } from "next/server";
 
 import { isValidUrl } from "@/utils/isValidUrl";
-import { generatePageParams } from "@/utils/generatePageParams";
+
 import metaFetcher from "meta-fetcher";
 
 export const runtime = "edge";
@@ -25,6 +24,9 @@ export async function POST(request: NextRequest) {
       status: 200,
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
     });
   } catch (e) {
