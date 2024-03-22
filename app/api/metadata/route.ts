@@ -15,18 +15,26 @@ export async function OPTIONS(req: NextRequest) {
   });
 }
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const url = searchParams.get("url");
-  return NextResponse.json(url, {
+  const url = searchParams.get("url") || "";
+
+  if (!isValidUrl(url)) {
+    return new Response("Invalid URL", {
+      status: 400,
+      headers: corsHeaders,
+    });
+  }
+
+  const metaData = await metaFetcher(url);
+
+  return NextResponse.json(metaData, {
     status: 200,
     headers: corsHeaders,
   });
 }
 
 // import { isValidUrl } from "@/utils/isValidUrl";
-
-// import metaFetcher from "meta-fetcher";
 
 // const corsHeaders = {
 //   "Access-Control-Allow-Origin": "*",
@@ -54,11 +62,11 @@ export function GET(request: NextRequest) {
 //   // const { url } = await request.json();
 
 //   // // early return if url is not valid
-//   // if (!isValidUrl(url)) {
-//   //   return new Response("Invalid URL", {
-//   //     status: 400,
-//   //   });
-//   // }
+// if (!isValidUrl(url)) {
+//   return new Response("Invalid URL", {
+//     status: 400,
+//   });
+// }
 
 //   // const metaData = await metaFetcher(url);
 
