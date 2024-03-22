@@ -1,8 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
-
 import { isValidUrl } from "@/utils/isValidUrl";
-
 import metaFetcher from "meta-fetcher";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
+
+export function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const url = searchParams.get("url");
+  return NextResponse.json(url, {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
+
+// import { isValidUrl } from "@/utils/isValidUrl";
+
+// import metaFetcher from "meta-fetcher";
 
 // const corsHeaders = {
 //   "Access-Control-Allow-Origin": "*",
@@ -11,17 +35,17 @@ import metaFetcher from "meta-fetcher";
 // };
 
 // export async function OPTIONS(req: NextRequest) {
-//   return new NextResponse(null, {
-//     status: 200,
-//     headers: corsHeaders,
-//   });
+// return new NextResponse(null, {
+//   status: 200,
+//   headers: corsHeaders,
+// });
 // }
 
-export function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const url = searchParams.get("url");
-  return NextResponse.json(url);
-}
+// export function GET(request: NextRequest) {
+//   const searchParams = request.nextUrl.searchParams;
+//   const url = searchParams.get("url");
+//   return NextResponse.json(url);
+// }
 
 // export async function POST(request: NextRequest) {
 //   return NextResponse.json({ foo: "bar" }, { headers: corsHeaders });

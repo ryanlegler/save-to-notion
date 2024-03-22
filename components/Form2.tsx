@@ -12,7 +12,8 @@ export function Form2() {
   );
   const handleSubmit = useCallback(async () => {
     const response = await fetch(
-      `http://localhost:3000/api/metadata?url=${url || "bar"}`,
+      `http://localhost:3001/api/metadata?url=${url}`,
+      // `https://save-to-notion-gray.vercel.app/api/metadata?url=${url}`,
       {
         method: "GET",
         headers: {
@@ -22,7 +23,6 @@ export function Form2() {
     );
 
     const result = await response.json();
-
     console.log("result", result);
   }, [url]);
 
