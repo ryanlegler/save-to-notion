@@ -26,57 +26,35 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const metaData = await metaFetcher(url);
+  const metaDataResponse = await metaFetcher(url);
 
-  return NextResponse.json(metaData, {
+  if (!metaDataResponse?.metadata?.banner) {
+    const alternate = await fetch(
+      `http://iframely.server.crestify.com/iframely?url=${url}`
+    );
+
+    const data = await alternate.json();
+    const imageLink =
+      data.links.find((value: { type: string }) =>
+        value.type.startsWith("image/")
+      )?.href || "";
+
+    const mergedMetaData = {
+      ...metaDataResponse,
+      metadata: {
+        ...metaDataResponse.metadata,
+        banner: imageLink,
+      },
+    };
+
+    return NextResponse.json(mergedMetaData, {
+      status: 200,
+      headers: corsHeaders,
+    });
+  }
+
+  return NextResponse.json(metaDataResponse, {
     status: 200,
     headers: corsHeaders,
   });
 }
-
-// import { isValidUrl } from "@/utils/isValidUrl";
-
-// const corsHeaders = {
-//   "Access-Control-Allow-Origin": "*",
-//   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-//   "Access-Control-Allow-Headers": "Content-Type, Authorization",
-// };
-
-// export async function OPTIONS(req: NextRequest) {
-// return new NextResponse(null, {
-//   status: 200,
-//   headers: corsHeaders,
-// });
-// }
-
-// export function GET(request: NextRequest) {
-//   const searchParams = request.nextUrl.searchParams;
-//   const url = searchParams.get("url");
-//   return NextResponse.json(url);
-// }
-
-// export async function POST(request: NextRequest) {
-//   return NextResponse.json({ foo: "bar" }, { headers: corsHeaders });
-
-//   // could add other properties here on the body to include notion DB
-//   // const { url } = await request.json();
-
-//   // // early return if url is not valid
-// if (!isValidUrl(url)) {
-//   return new Response("Invalid URL", {
-//     status: 400,
-//   });
-// }
-
-//   // const metaData = await metaFetcher(url);
-
-//   // try {
-//   //   return new Response(JSON.stringify(metaData), {
-//   //     status: 200,
-//   //   });
-//   // } catch (e) {
-//   //   return new Response("Request cannot be processed!", {
-//   //     status: 400,
-//   //   });
-//   // }
-// }
