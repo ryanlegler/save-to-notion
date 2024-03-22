@@ -11,17 +11,19 @@ export function Form2() {
     []
   );
   const handleSubmit = useCallback(async () => {
-    const response = await fetch(`/api/metadata`, {
-      method: "POST",
-      body: JSON.stringify({
-        url,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `http://localhost:3000/api/metadata?url=${url || "bar"}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    console.log("response", response);
+    const result = await response.json();
+
+    console.log("result", result);
   }, [url]);
 
   return (
