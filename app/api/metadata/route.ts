@@ -1,20 +1,21 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { isValidUrl } from "@/utils/isValidUrl";
 
 import metaFetcher from "meta-fetcher";
 
-export const runtime = "edge";
+export const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
 
-export async function GET(request: NextRequest) {
-  return new Response("Hello", {
-    status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    },
-  });
+export async function OPTIONS(req: NextRequest) {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
+export async function POST(request: NextRequest) {
+  return NextResponse.json({ foo: "bar" }, { headers: corsHeaders });
 
   // could add other properties here on the body to include notion DB
   // const { url } = await request.json();
